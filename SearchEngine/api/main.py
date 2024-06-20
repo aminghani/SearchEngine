@@ -11,7 +11,7 @@ from SearchEngine.ai.clip import load_clip
 from SearchEngine.ai.mt import load_model, translate
 from SearchEngine.utils.utils import detect_language
 from pathlib import Path
-
+from SearchEngine.utils.utils import read_config
 app = FastAPI()
 load_model()
 load_clip()
@@ -21,19 +21,20 @@ static_directory = current_directory / 'static'
 
 # Mount the static directory
 app.mount("/static", StaticFiles(directory=static_directory), name="static")
+config = read_config()
 
 @app.get("/")
 async def root():
     return FileResponse(static_directory / "index.html")
 
 @app.get("/search_images")
-async def search_images(query: str = Query(..., min_length=1)):
+async def search_images(query: str = Query(..., min_length=1), min_price: float = Query(0), max_price: float = Query(10000)):
     lang = detect_language(query)
     if lang == 'Persian':
         query = translate(query)
-    result = retrieve_nearest_samples(query)
-
-    images = [{"image_url": a.payload['image_url'], "name": a.payload.get('name', ''), "caption": a.payload.get('caption', '')} for a in result]
+    result = retrieve_nearest_samples(query, min_price, max_price, top_k=int(config['search']['num_retrieve']))
+    
+    images = [{"image_url": a.payload['image_url'], "name": a.payload.get('name', ''), "caption": a.payload.get('caption', ''), "price": a.payload.get('price', 0)} for a in result]
     return JSONResponse(content={"images": images})
 
 if __name__ == '__main__':

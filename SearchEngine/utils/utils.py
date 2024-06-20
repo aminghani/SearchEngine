@@ -1,3 +1,5 @@
+import configparser
+
 def detect_language(text):
     def is_english(text):
         return all(ord(char) < 128 for char in text)
@@ -13,3 +15,8 @@ def detect_language(text):
         return "Persian"
     else:
         return "Unknown"
+
+def read_config():
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+    return config

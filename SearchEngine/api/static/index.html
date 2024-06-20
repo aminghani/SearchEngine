@@ -11,6 +11,9 @@
         <h1>Image Search Engine</h1>
         <form id="searchForm">
             <input type="text" id="searchInput" placeholder="Search for images...">
+            <label for="priceRange">Price Range: <span id="priceMinValue">0</span> - <span id="priceMaxValue">10000</span></label>
+            <input type="range" id="priceRangeMin" min="0" max="10000" value="0" step="1">
+            <input type="range" id="priceRangeMax" min="0" max="10000" value="10000" step="1">
             <button type="submit">Search</button>
         </form>
         <div id="loading" class="loading">

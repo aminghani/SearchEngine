@@ -1,4 +1,5 @@
 from qdrant_client import models, QdrantClient
+from qdrant_client.models import Filter, FieldCondition, Range
 import json
 import requests
 from PIL import Image
@@ -48,7 +49,7 @@ def create_qdrant_collection(client, collection_name="image_collection"):
     ),
     )
 
-def save_to_qdrant(client, collection_name, name, description, image_features, image_path, full_urls: List[str], counter):
+def save_to_qdrant(client, collection_name, name, description,image_features, image_path, full_urls: List[str], counter, price):
     points = []
     for i, feature in enumerate(image_features):
         point = PointStruct(
@@ -58,7 +59,8 @@ def save_to_qdrant(client, collection_name, name, description, image_features, i
                 "name": name,
                 "description": description,
                 "image_path": image_path[i],
-                "image_url": full_urls[i]
+                "image_url": full_urls[i],
+                "price": price
             }
         )
         points.append(point)
@@ -78,6 +80,7 @@ def populate_qdrant(num_images: int):
         image_urls = item["images"]
         name = item["name"]
         description = item["description"]
+        price = item['current_price']
         files = [f for f in listdir('SearchEngine/data/images') if isfile(join('SearchEngine/data/images', f))]
         if len(files) > num_images:
             break
@@ -85,29 +88,31 @@ def populate_qdrant(num_images: int):
         image_paths = download_images(image_urls, save_dir="SearchEngine/data/images", counter=len_file)
         image_features = embed_image(model, processor, image_paths)
 
-        save_to_qdrant(client, "image_collection", name, description, image_features, image_paths, image_urls, len_file)
+        save_to_qdrant(client, "image_collection", name, description, image_features, image_paths, image_urls, len_file, price)
 
-def retrieve_nearest_samples(text, top_k=5, collection_name='image_collection'):
+def retrieve_nearest_samples(text, min_price, max_price, top_k=5, collection_name='image_collection'):
     model, processor = load_clip()
     embedding = embed_text(model, processor, [text])
     client = connect_qdrant()
     if len(embedding.shape) == 2:
         embedding = embedding.flatten()
-        
+    
+    price_filter = Filter(
+        must=[
+            FieldCondition(
+                key="price",
+                range=Range(
+                    gte=min_price,
+                    lte=max_price
+                )
+            )
+        ]
+    )
+
     search_result = client.search(
         collection_name=collection_name,
         query_vector=embedding.tolist(),
-        limit=top_k  
+        limit=top_k,
+        query_filter=price_filter
     )
     return search_result
-
-if __name__ == "__main__":
-    populate_qdrant()
-    """
-    client = QdrantClient(path="SearchEngine\database\cache")
-    model, processor = load_clip()
-    embedding_to_search = embed_text(model, processor, ['a green dress'])
-    nearest_samples = retrieve_nearest_samples(client, "image_collection", embedding_to_search, top_k=5)
-
-    print(nearest_samples)
-    """
