@@ -9,13 +9,18 @@ from qdrant_client.http.models import PointStruct
 from SearchEngine.ai.clip import load_clip, embed_image, embed_text
 from os import listdir
 from os.path import isfile, join
+import os
 
 def connect_qdrant():
-    client = QdrantClient(path="SearchEngine\database\cache")
+    current_dir = os.getcwd()
+    file_path = os.path.join(current_dir, 'SearchEngine', 'database', 'cache')
+    client = QdrantClient(path=file_path)
     return client
 
 def read_json():
-    with open('E:\mori\SearchEngine\SearchEngine\data\products.json', 'r', encoding='utf-8') as f:
+    current_dir = os.getcwd()
+    file_path = os.path.join(current_dir, 'SearchEngine', 'data', 'products.json')
+    with open(file_path, 'r', encoding='utf-8') as f:
         data = json.load(f)
     return data
 
@@ -63,7 +68,7 @@ def save_to_qdrant(client, collection_name, name, description, image_features, i
         points=points
     )
 
-def populate_qdrant():
+def populate_qdrant(num_images: int):
     client = connect_qdrant()
     create_qdrant_collection(client)
     model, processor = load_clip()
@@ -74,7 +79,7 @@ def populate_qdrant():
         name = item["name"]
         description = item["description"]
         files = [f for f in listdir('SearchEngine/data/images') if isfile(join('SearchEngine/data/images', f))]
-        if len(files) > 200:
+        if len(files) > num_images:
             break
         len_file = len(files)
         image_paths = download_images(image_urls, save_dir="SearchEngine/data/images", counter=len_file)

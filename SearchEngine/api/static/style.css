@@ -63,9 +63,18 @@ button:hover {
     justify-content: center;
 }
 
-.image-results img {
+.image-container {
     max-width: 150px;
     border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.image-container img {
+    max-width: 100%;
     border-radius: 4px;
     padding: 5px;
     background-color: white;
@@ -73,8 +82,19 @@ button:hover {
     transition: transform 0.2s;
 }
 
-.image-results img:hover {
+.image-container img:hover {
     transform: scale(1.05);
+}
+
+.image-container h3 {
+    margin: 10px 0 5px;
+    font-size: 1.2em;
+}
+
+.image-container p {
+    margin: 0;
+    font-size: 0.8em;
+    color: #666;
 }
 
 .loading {

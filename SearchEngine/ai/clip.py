@@ -29,6 +29,7 @@ def cosine_similarity(emb1, emb2):
     emb2_norm = emb2 / emb2.norm(dim=-1, keepdim=True)
     return torch.mm(emb1_norm, emb2_norm.t())
 
+"""
 if __name__ == '__main__':
     model, processor = load_clip()
     text_embed = ['two cats']
@@ -37,3 +38,4 @@ if __name__ == '__main__':
     embed_i = embed_image(model=model, processor=processor, image_paths=image_paths)
     res = cosine_similarity(embed_t, embed_i)
     print(res)
+"""

@@ -23,11 +23,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function displayImages(images) {
         imageResults.innerHTML = "";
-        images.forEach((imageURL) => {
+        images.forEach((image) => {
+            const imgContainer = document.createElement("div");
+            imgContainer.className = "image-container";
+
             const imgElement = document.createElement("img");
-            imgElement.src = imageURL;
+            imgElement.src = image.image_url;
             imgElement.alt = "Search result";
-            imageResults.appendChild(imgElement);
+
+            const nameElement = document.createElement("h3");
+            nameElement.textContent = image.name;
+
+            const captionElement = document.createElement("p");
+            captionElement.textContent = image.caption;
+
+            imgContainer.appendChild(imgElement);
+            imgContainer.appendChild(nameElement);
+            imgContainer.appendChild(captionElement);
+
+            imageResults.appendChild(imgContainer);
         });
     }
 
