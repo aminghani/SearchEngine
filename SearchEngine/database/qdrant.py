@@ -11,6 +11,7 @@ from SearchEngine.ai.clip import load_clip, embed_image, embed_text
 from os import listdir
 from os.path import isfile, join
 import os
+from SearchEngine.database.meili import save2meili 
 
 def connect_qdrant():
     current_dir = os.getcwd()
@@ -70,7 +71,7 @@ def save_to_qdrant(client, collection_name, name, description,image_features, im
         points=points
     )
 
-def populate_qdrant(num_images: int):
+def populate(num_images: int):
     client = connect_qdrant()
     create_qdrant_collection(client)
     model, processor = load_clip()
@@ -85,12 +86,17 @@ def populate_qdrant(num_images: int):
         if len(files) > num_images:
             break
         len_file = len(files)
-        image_paths = download_images(image_urls, save_dir="SearchEngine/data/images", counter=len_file)
+        image_paths = download_images(image_urls, save_dir="SearchEngine/data/images",
+                                       counter=len_file)
         image_features = embed_image(model, processor, image_paths)
 
-        save_to_qdrant(client, "image_collection", name, description, image_features, image_paths, image_urls, len_file, price)
+        save_to_qdrant(client, "image_collection", name, description, image_features,
+                        image_paths, image_urls, len_file, price)
+        
+        save2meili(item, 'image_collection')
 
-def retrieve_nearest_samples(text, min_price, max_price, top_k=5, collection_name='image_collection'):
+def retrieve_nearest_samples(text, min_price, max_price, top_k=5,
+                              collection_name='image_collection'):
     model, processor = load_clip()
     embedding = embed_text(model, processor, [text])
     client = connect_qdrant()

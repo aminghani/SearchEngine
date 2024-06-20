@@ -24,6 +24,20 @@ else
     echo "Virtual environment activated."
 fi
 
+is_meilisearch_running() {
+    pgrep -x "meilisearch" > /dev/null
+    return $?
+}
+
+ORIGINAL_SCRIPT=$VENV_DIR"/SearchEngine/database/meili_server.sh"
+
+if is_meilisearch_running; then
+    echo "Meilisearch is already running."
+else
+    echo "Meilisearch is not running. Starting Meilisearch..."
+    bash $ORIGINAL_SCRIPT
+fi
+
 python3 SearchEngine/database/populate.py
 
 echo "finished populating."
