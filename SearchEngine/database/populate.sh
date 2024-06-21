@@ -7,7 +7,7 @@ if [ ! -d $VENV_DIR"/venv" ]; then
     echo "Virtual environment not found. Creating one..."
     
     apt-get update
-    apt install python3.8-venv
+    apt install python3.12-venv
     
     python3 -m venv venv
     
@@ -21,6 +21,8 @@ else
     
     source $VENV_DIR/venv/bin/activate
     
+    pip install -r $VENV_DIR/requirements.txt
+
     echo "Virtual environment activated."
 fi
 
@@ -28,8 +30,6 @@ is_meilisearch_running() {
     pgrep -x "meilisearch" > /dev/null
     return $?
 }
-
-source $VENV_DIR/venv/bin/activate
 
 ORIGINAL_SCRIPT=$VENV_DIR"/SearchEngine/database/meili_server.sh"
 
