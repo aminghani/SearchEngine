@@ -24,8 +24,9 @@ if [ -z "$(ls -A "$DIR")" ]; then
 
   "$POPULATE_SCRIPT"
   echo "populate is done."
-else
-  source $RUN_DIR/venv/bin/activate
-  echo "running the server."
-  python3 $RUN_DIR"/SearchEngine/api/main.py"
+    
 fi
+
+source $RUN_DIR/venv/bin/activate
+echo "running the server."
+python3 $RUN_DIR"/SearchEngine/api/main.py"

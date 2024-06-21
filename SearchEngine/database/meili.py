@@ -7,6 +7,11 @@ client = meilisearch.Client(config['meili']['client'], config['meili']['master_k
 
 def index_(collection):
     index = client.index(collection)
+
+    index.update_settings({
+    'filterableAttributes': ['current_price']
+      })
+
     return index
 
 def add_document(document, collection):
