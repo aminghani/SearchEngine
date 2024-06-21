@@ -4,6 +4,9 @@ RUN_DIR=$(pwd)
 
 DIR=$RUN_DIR"/SearchEngine/data/images"
 
+chmod 755 $RUN_DIR"/SearchEngine/database/populate.sh"
+chmod 755 $RUN_DIR"/SearchEngine/database/meili_server.sh"
+
 if [ ! -d "$DIR" ]; then
   echo "Directory does not exist. Creating directory..."
   mkdir -p "$DIR"
