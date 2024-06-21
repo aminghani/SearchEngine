@@ -163,6 +163,6 @@ cython_debug/
 
 /SearchEngine/database/cache/
 /SearchEngine/data/images/
-data.ms/
+/data.ms/
 /dumps
 meilisearch
