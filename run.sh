@@ -5,8 +5,14 @@ RUN_DIR=$(pwd)
 DIR=$RUN_DIR"/SearchEngine/data/images"
 
 if [ ! -d "$DIR" ]; then
-  echo "Directory does not exist."
-  exit 1
+  echo "Directory does not exist. Creating directory..."
+  mkdir -p "$DIR"
+  if [ $? -eq 0 ]; then
+    echo "Directory created successfully."
+  else
+    echo "Failed to create directory."
+    exit 1
+  fi
 fi
 
 if [ -z "$(ls -A "$DIR")" ]; then
