@@ -10,10 +10,10 @@ else
     echo "Meilisearch is already installed."
 fi
 
-MASTER_KEY=$(grep "^master_key=" $CONFIG_FILE | sed 's/master_key=//')
+MASTER_KEY=$(grep -A 1 "\[meili\]" $CONFIG_FILE | grep "master_key" | cut -d '=' -f2 | tr -d ' ')
 
 echo "master_key: $MASTER_KEY"
 
-./meilisearch --master-key=key &
+./meilisearch --master-key=$MASTER_KEY &
 
 cd $CURR_DIR

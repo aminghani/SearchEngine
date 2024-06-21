@@ -13,7 +13,7 @@ def add_document(document, collection):
     index = index_(collection)
     index.add_documents(document)
 
-def search(query, collection='image_collection', min=0, max=10000, limit=5):
+def search(query, min=0, max=10000, limit=5, collection='image_collection'):
     index = index_(collection)
 
     results = index.search(query, {'limit': limit, 
@@ -38,4 +38,3 @@ def save2meili(document, collection):
     
     add_document(documents_to_add, collection)
 
-print(search("green dress"))
