@@ -29,6 +29,8 @@ is_meilisearch_running() {
     return $?
 }
 
+source $VENV_DIR/venv/bin/activate
+
 ORIGINAL_SCRIPT=$VENV_DIR"/SearchEngine/database/meili_server.sh"
 
 if is_meilisearch_running; then
