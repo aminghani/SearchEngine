@@ -28,3 +28,4 @@ clip and a mt model will be downloaded, then you can access the app using localh
 ```
 http://localhost:8000
 ```
+You can change search properties from config.ini file
