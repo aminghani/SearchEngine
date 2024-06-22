@@ -29,3 +29,8 @@ clip and a mt model will be downloaded, then you can access the app using localh
 http://localhost:8000
 ```
 You can change search properties from config.ini file
+
+Note: if you get module not found error, set the python path to the location of the project before running run.sh file:
+```bash
+export PYTHONPATH=${PYTHONPATH}:$path/to/project/root
+```
