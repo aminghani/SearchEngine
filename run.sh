@@ -27,6 +27,15 @@ if [ -z "$(ls -A "$DIR")" ]; then
     
 fi
 
+ORIGINAL_SCRIPT=$RUN_DIR"/SearchEngine/database/meili_server.sh"
+
+if is_meilisearch_running; then
+    echo "Meilisearch is already running."
+else
+    echo "Meilisearch is not running. Starting Meilisearch..."
+    bash $ORIGINAL_SCRIPT
+fi
+
 source $RUN_DIR/venv/bin/activate
 echo "running the server."
 python3 $RUN_DIR"/SearchEngine/api/main.py"
